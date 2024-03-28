@@ -9,23 +9,32 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ChatRoomService {
 
-    private final ChatRoomRepository repository;
+    private final ChatRoomRepository chatRoomRepository;
 
-    public Optional<String> getChatRoomId(String senderId, String recipientId, boolean createNewRoomIfNotExists) {
-        return repository.findBySenderIdAndRecipientId(senderId, recipientId).map(ChatRoom::getChatId).or(() -> {
-            if (createNewRoomIfNotExists) {
-                var chatId = createChatId(senderId, recipientId);
-                return Optional.of(chatId);
-            }
-            return Optional.empty();
-        });
+    public Optional<String> getChatRoomId(
+            String senderId,
+            String recipientId,
+            boolean createNewRoomIfNotExists
+    ) {
+        return chatRoomRepository
+                .findBySenderIdAndRecipientId(senderId, recipientId)
+                .map(ChatRoom::getChatId)
+                .or(() -> {
+                    if(createNewRoomIfNotExists) {
+                        var chatId = createChatId(senderId, recipientId);
+                        return Optional.of(chatId);
+                    }
+
+                    return  Optional.empty();
+                });
     }
 
     private String createChatId(String senderId, String recipientId) {
-
         var chatId = String.format("%s_%s", senderId, recipientId);
+
         ChatRoom senderRecipient = ChatRoom
-                .builder().chatId(chatId)
+                .builder()
+                .chatId(chatId)
                 .senderId(senderId)
                 .recipientId(recipientId)
                 .build();
@@ -36,8 +45,10 @@ public class ChatRoomService {
                 .senderId(recipientId)
                 .recipientId(senderId)
                 .build();
-        repository.save(senderRecipient);
-        repository.save(recipientSender);
+
+        chatRoomRepository.save(senderRecipient);
+        chatRoomRepository.save(recipientSender);
+
         return chatId;
     }
 }

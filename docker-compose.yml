@@ -18,6 +18,9 @@ services:
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=fatih
       - ME_CONFIG_MONGODB_ADMINPASSWORD=fatih
+      - ME_CONFIG_BASICAUTH_USERNAME=fatih
+      - ME_CONFIG_BASICAUTH_PASSWORD=fatih
       - ME_CONFIG_MONGODB_SERVER=mongodb
+
 volumes:
-  mongo: {}
+  mongo: { }

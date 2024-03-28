@@ -14,27 +14,28 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class ChatController {
-    private final ChatMessageService chatMessageService;
+
     private final SimpMessagingTemplate messagingTemplate;
+    private final ChatMessageService chatMessageService;
 
     @MessageMapping("/chat")
     public void processMessage(@Payload ChatMessage chatMessage) {
-        ChatMessage saveMsg = chatMessageService.save(chatMessage);
+        ChatMessage savedMsg = chatMessageService.save(chatMessage);
         messagingTemplate.convertAndSendToUser(
-                chatMessage.getRecipientId(), "/queue/messages", ChatNotification
-                        .builder().id(saveMsg.getId())
-                        .senderId(saveMsg.getSenderId())
-                        .recipientId(saveMsg.getRecipientId())
-                        .content(saveMsg.getContent())
-                        .build()
+                chatMessage.getRecipientId(), "/queue/messages",
+                new ChatNotification(
+                        savedMsg.getId(),
+                        savedMsg.getSenderId(),
+                        savedMsg.getRecipientId(),
+                        savedMsg.getContent()
+                )
         );
     }
 
     @GetMapping("/messages/{senderId}/{recipientId}")
-    public ResponseEntity<List<ChatMessage>> findChatMessages(
-            @PathVariable("senderId") String senderId,
-            @PathVariable("recipientId") String recipientId) {
-
-        return ResponseEntity.ok(chatMessageService.findChatMessages(senderId, recipientId));
+    public ResponseEntity<List<ChatMessage>> findChatMessages(@PathVariable String senderId,
+                                                              @PathVariable String recipientId) {
+        return ResponseEntity
+                .ok(chatMessageService.findChatMessages(senderId, recipientId));
     }
 }
