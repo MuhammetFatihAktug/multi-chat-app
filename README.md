@@ -59,9 +59,9 @@ mvn spring-boot:run
 
 Here are some screenshots of the chat application:
 
-![Screenshot 2](https://github.com/MuhammetFatihAktug/multi-chat-app/blob/master/src/main/resources/static/img/1.png)
+![Screenshot 2](https://github.com/MuhammetFatihAktug/multi-chat-app/blob/master/src/main/resources/static/img/1.PNG)
 
-![Screenshot 1](https://github.com/MuhammetFatihAktug/multi-chat-app/blob/master/src/main/resources/static/img/2.png)
+![Screenshot 1](https://github.com/MuhammetFatihAktug/multi-chat-app/blob/master/src/main/resources/static/img/2.PNG)
 
 
 ## Additional Resources
